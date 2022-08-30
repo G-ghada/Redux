@@ -1,60 +1,106 @@
 import React, { useState } from "react";
+import { Row, Col, Button, Container, Form } from "react-bootstrap";
+import { v4 as uuidv4 } from "uuid";
 import { useDispatch } from "react-redux";
-import { addTask } from "../redux/tasksSlice";
-
-const AddTodo = () => {
-  const [value, setValue] = useState("");
+import { useSelector } from "react-redux";
+import {
+  addTask,
+  filterDoneTasks,
+  filterIsGoingTasks,
+  showAllTasks,
+} from "../redux/actions/toDoActions";
+function AddTodo() {
+  const [newTask, setNewTask] = useState({});
 
   const dispatch = useDispatch();
-  const activeList = () => {
-
-  };
-  const completedList = () => {
-
-  };
+  const handleChange = (e) => {
+    setNewTask({
+      ...newTask,
+      [e.target.name]: e.target.value,
+      id: uuidv4(),
+      isDone: false,
+      
+    });
   
-  const onSubmit = (event) => {
-    event.preventDefault();
-
-    if (value.trim().length === 0) {
-      alert("Enter a task before adding !!");
-      setValue("");
-      return;
-    }
-
-    dispatch(
-      addTask({
-        task: value,
-      })
-    );
-
-    setValue("");
   };
-
+  const handleAdd = () => {
+    dispatch(addTask(newTask));
+    
+  };
+  const handleFilterDone = () => {
+    dispatch(filterDoneTasks());
+  };
+  const handleFilterIsGoing = () => {
+    dispatch(filterIsGoingTasks());
+  };
+  const handleShowAllTasks = () => {
+    dispatch(showAllTasks());
+  };
   return (
-    <div className="add-todo">
-      <input
-        type="text"
-        className="task-input"
-        placeholder="Add task"
-        value={value}
-        onChange={(event) => setValue(event.target.value)}
-      ></input>
-
-      <button className="task-button" onClick={onSubmit}>
-        Save
-      </button>
-      <button className="task-button2" onClick={activeList}>
-        active
-      </button>
-      <button className="task-button2" onClick={completedList}>
-        completed
-      </button>
-      <button className="task-button2" onClick={onSubmit}>
-        All
-      </button>
-    </div>
+    <Container>
+      <Row md>
+        <Col>
+          <h1>To Do List</h1>
+        </Col>
+      </Row>
+      <Row
+        md={2}
+        style={{
+          borderBottom: "1px #b7b7b7 solid",
+          paddingBottom: " 20px ",
+        }}
+      >
+        <Col md>
+          <Form.Control
+            type="text"
+            name="taskTitel"
+            placeholder="Add Task"
+            onChange={(e) => handleChange(e)}
+          />
+        </Col>
+        <Col md style={{ alignSelf: "flex-end" }}>
+          <Button variant="primary" type="submit" onClick={() => handleAdd()}>
+            Add
+          </Button>
+        </Col>
+      </Row>
+      <Row style={{ marginTop: "20px" }}>
+        <Col lg>
+          <Button
+            variant="warning"
+            type="submit"
+            onClick={() => {
+              handleFilterDone();
+            }}
+          >
+            Done
+          </Button>
+        </Col>
+        <Col lg>
+          <Button
+            variant="warning"
+            type="submit"
+            onClick={() => {
+              handleFilterIsGoing();
+            }}
+          >
+            Not Done
+          </Button>
+        </Col>
+        <Col lg>
+          <Button
+            variant="warning"
+            type="submit"
+            onClick={() => {
+              handleShowAllTasks();
+            }}
+          >
+            All
+          </Button>
+        </Col>
+      </Row>
+    </Container>
   );
-};
+}
 
 export default AddTodo;

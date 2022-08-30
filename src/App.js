@@ -1,15 +1,14 @@
-import React from "react";
+import "./App.css";
+import ToDoList from "./components/ToDoList";
 import AddTodo from "./components/AddTodo";
-import TodoList from "./components/TodoList";
 
-const App = () => {
+function App() {
   return (
-    <div className="app">
-      <h1 className="app-title">To do list</h1>
+    <div className="App">
       <AddTodo />
-      <TodoList />
+      <ToDoList />
     </div>
   );
-};
+}
 
 export default App;

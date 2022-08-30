@@ -1,19 +1,47 @@
 import React from "react";
-import TodoItem from "./TodoItem";
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import ToDoItem from "./ToDoItem";
 
-const TodoList = () => {
-  const todos = useSelector((state) => {
-    return state.tasks;
-  });
-
+function ToDoList() {
+  const tasks = useSelector((state) => state.toDoReducer.tasks);
+  const doneTasks = useSelector((state) => state.toDoReducer.doneTasks);
+  const onGoingTasks = useSelector((state) => state.toDoReducer.onGoingTasks);
+  console.log(tasks);
   return (
-    <ul className="tasks-list">
-      {todos.map((todo) => (
-        <TodoItem id={todo.id} title={todo.name} completed={todo.status} />
-      ))}
-    </ul>
+    <Container
+      style={{
+        margin: "auto",
+        padding: "20px",
+      }}
+    >
+      <Row lg={1} style={{ marginTop: "20px" }}>
+        {doneTasks.length > 0
+          ? doneTasks.map((elt) => {
+              return (
+                <Col lg key={elt.id}>
+                  <ToDoItem {...elt} />
+                </Col>
+              );
+            })
+          : onGoingTasks.length > 0
+          ? onGoingTasks.map((elt) => {
+              return (
+                <Col lg key={elt.id}>
+                  <ToDoItem {...elt} />
+                </Col>
+              );
+            })
+          : tasks.map((elt) => {
+              return (
+                <Col lg key={elt.id}>
+                  <ToDoItem {...elt} />
+                </Col>
+              );
+            })}
+      </Row>
+    </Container>
   );
-};
+}
 
-export default TodoList;
+export default ToDoList;
